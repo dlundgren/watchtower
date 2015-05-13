@@ -1,0 +1,29 @@
+{
+  "name": "dlundgren/watchtower",
+  "description": "WatchTower Authentication",
+  "license": "mit",
+  "authors": [
+    {
+      "name": "David Lundgren",
+      "email": "dlundgren@syberisle.net"
+    }
+  ],
+  "require" : {
+    "php" : ">=5.5.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.4.*",
+    "mikey179/vfsStream": "v1.4.0",
+    "codeclimate/php-test-reporter": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "WatchTower\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WatchTower\\Test\\": "tests/unit/src/"
+    }
+  }
+}

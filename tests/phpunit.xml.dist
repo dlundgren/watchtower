@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit colors="true" bootstrap="./unit/bootstrap.php" strict="true">
+	<testsuite name="Tests for WatchTower">
+		<directory>unit/src/</directory>
+	</testsuite>
+	<groups>
+		<exclude>
+			<group>broken</group>
+		</exclude>
+	</groups>
+	<filter>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">../src/</directory>
+		</whitelist>
+	</filter>
+</phpunit>
