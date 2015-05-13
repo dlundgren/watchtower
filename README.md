@@ -1,6 +1,9 @@
 WatchTower
 ==========
 
+[![Travis CI](https://secure.travis-ci.org/dlundgren/watchtower.png)](https://travis-ci.org/dlundgren/watchtower) [![Code Climate](https://codeclimate.com/github/dlundgren/watchtower/badges/gpa.svg)](https://codeclimate.com/github/dlundgren/watchtower)
+
+
 WatchTower is a library that allows for the identification and authentication of users using different
 backend providers and protocols.
 
