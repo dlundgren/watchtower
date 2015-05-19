@@ -15,6 +15,8 @@ WatchTower recognizes the following state of an identity:
 
 It should be noted that identified is **NOT** the same thing as being authenticated.
 
+PSR-1 and PSR-4 compliant.
+
 Process
 =======
 
