@@ -59,11 +59,37 @@ class WatchTowerTest
 	{
 		$wt = new WatchTower();
 		$wt->watch(new Sentry\GenericCallback('pre', function(Event $e) {
+			$e->identity()->setAuthenticated();
 			$e->stopPropagation();
 		}));
 		$identity = $wt->authenticate('superman', 'lois lane');
 
 		self::assertFalse($identity->hasErrors());
 		self::assertTrue($identity->isAuthenticated());
+	}
+
+	public function testIssue1_AuthenticateFailsWithNoErrors()
+	{
+		$wt = new WatchTower();
+		$wt->watch(new Sentry\Authentication\Callback('auth', function(Event $e) {
+			$e->stopPropagation();
+		}));
+		$identity = $wt->authenticate('superman', 'lois lane');
+
+		self::assertFalse($identity->hasErrors());
+		self::assertFalse($identity->isAuthenticated());
+	}
+
+	public function testIssue1_AuthenticateFailsWithErrors()
+	{
+		$wt = new WatchTower();
+		$wt->watch(new Sentry\Authentication\Callback('auth', function(Event $e) {
+			$e->triggerError(Sentry\Sentry::INVALID, 'Not valid');
+			$e->stopPropagation();
+		}));
+		$identity = $wt->authenticate('superman', 'lois lane');
+
+		self::assertTrue($identity->hasErrors());
+		self::assertFalse($identity->isAuthenticated());
 	}
 }

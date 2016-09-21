@@ -118,9 +118,6 @@ class WatchTower
 		if ($event->hasError()) {
 			$identity->addError($event->error());
 		}
-		elseif ($event instanceof Authenticate) {
-			$identity->setAuthenticated();
-		}
 
 		return $identity;
 	}
