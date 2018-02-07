@@ -1,7 +1,7 @@
 {
   "name": "dlundgren/watchtower",
   "description": "WatchTower Authentication",
-  "license": "mit",
+  "license": "MIT",
   "authors": [
     {
       "name": "David Lundgren",
