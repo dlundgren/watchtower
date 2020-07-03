@@ -4,9 +4,8 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
- */
+*/
+
 namespace WatchTower\Test;
 
 use PHPUnit\Framework\TestCase;
@@ -24,7 +23,7 @@ class WatchTowerTest
 {
 	public function testIdentifyWithNoSentriesReturnsInvalid()
 	{
-		$wt = new WatchTower();
+		$wt       = new WatchTower();
 		$identity = $wt->identify('superman');
 
 		self::assertTrue($identity->hasErrors());
@@ -35,12 +34,16 @@ class WatchTowerTest
 	public function testIdentifyStopsPropagation()
 	{
 		$wt = new WatchTower();
-		$wt->watch(new Sentry\GenericCallback('pre', function(Event $e) {
-			$e->stopPropagation();
-		}));
-		$wt->watch(new Sentry\GenericCallback('no', function(Event $e) {
-			throw new \Exception("shouldn't run this");
-		}));
+		$wt->watch(
+			new Sentry\GenericCallback(
+				'pre', function (Event $e) {
+				$e->stopPropagation();
+			}));
+		$wt->watch(
+			new Sentry\GenericCallback(
+				'no', function (Event $e) {
+				throw new \Exception("shouldn't run this");
+			}));
 
 		$identity = $wt->identify('superman');
 		self::assertFalse($identity->hasErrors());
@@ -48,7 +51,7 @@ class WatchTowerTest
 
 	public function testAuthenticateWithNoSentriesReturnsInvalid()
 	{
-		$wt = new WatchTower();
+		$wt       = new WatchTower();
 		$identity = $wt->authenticate('superman', 'lois lane');
 
 		self::assertTrue($identity->hasErrors());
@@ -59,10 +62,12 @@ class WatchTowerTest
 	public function testAuthenticateSuccess()
 	{
 		$wt = new WatchTower();
-		$wt->watch(new Sentry\GenericCallback('pre', function(Event $e) {
-			$e->identity()->setAuthenticated();
-			$e->stopPropagation();
-		}));
+		$wt->watch(
+			new Sentry\GenericCallback(
+				'pre', function (Event $e) {
+				$e->identity()->setAuthenticated();
+				$e->stopPropagation();
+			}));
 		$identity = $wt->authenticate('superman', 'lois lane');
 
 		self::assertFalse($identity->hasErrors());
@@ -72,9 +77,11 @@ class WatchTowerTest
 	public function testIssue1_AuthenticateFailsWithNoErrors()
 	{
 		$wt = new WatchTower();
-		$wt->watch(new Sentry\Authentication\Callback('auth', function(Event $e) {
-			$e->stopPropagation();
-		}));
+		$wt->watch(
+			new Sentry\Authentication\Callback(
+				'auth', function (Event $e) {
+				$e->stopPropagation();
+			}));
 		$identity = $wt->authenticate('superman', 'lois lane');
 
 		self::assertFalse($identity->hasErrors());
@@ -84,10 +91,12 @@ class WatchTowerTest
 	public function testIssue1_AuthenticateFailsWithErrors()
 	{
 		$wt = new WatchTower();
-		$wt->watch(new Sentry\Authentication\Callback('auth', function(Event $e) {
-			$e->triggerError(Sentry\Sentry::INVALID, 'Not valid');
-			$e->stopPropagation();
-		}));
+		$wt->watch(
+			new Sentry\Authentication\Callback(
+				'auth', function (Event $e) {
+				$e->triggerError(Sentry\Sentry::INVALID, 'Not valid');
+				$e->stopPropagation();
+			}));
 		$identity = $wt->authenticate('superman', 'lois lane');
 
 		self::assertTrue($identity->hasErrors());

@@ -4,9 +4,8 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
  */
+
 namespace WatchTower\Sentry\Authentication;
 
 use WatchTower\Exception\InvalidArgument;
@@ -107,7 +106,8 @@ class Ldap
 	 * Returns whether or not the given identity/credential are valid
 	 *
 	 * @param Event $event
-	 * @return mixed|void
+	 *
+	 * @return void
 	 */
 	public function discern(Event $event)
 	{
@@ -118,23 +118,34 @@ class Ldap
 		$identity = $event->identity();
 		$ldap     = ldap_connect($this->server, $this->port);
 		if (!$ldap) {
-			return $this->setErrorOnEvent($ldap, $event, Sentry::INTERNAL, "Unable to connect to {$this->server}");
+			$this->setErrorOnEvent($ldap, $event, Sentry::INTERNAL, "Unable to connect to {$this->server}");
+
+			return;
 		}
 
 		if (!empty($this->bindDn)) {
 			$bind = ldap_bind($ldap, $this->bindDn, $this->bindPassword);
 			if (!$bind) {
-				return $this->setErrorOnEvent($ldap, $event, Sentry::INTERNAL, "Could not bind to {$this->server} as {$this->bindDn}");
+				$this->setErrorOnEvent(
+					$ldap,
+					$event,
+					Sentry::INTERNAL,
+					"Could not bind to {$this->server} as {$this->bindDn}"
+				);
+
+				return;
 			}
 		}
 
 		$userDn = $this->getIdentityDn($ldap, $event);
 		if ($userDn === false) {
-			return false;
+			return;
 		}
 
 		if (ldap_bind($ldap, $userDn, $identity->credential()) === false) {
-			return $this->setErrorOnEvent($ldap, $event, Sentry::INVALID, "Invalid credentials");
+			$this->setErrorOnEvent($ldap, $event, Sentry::INVALID, "Invalid credentials");
+
+			return;
 		}
 		elseif (!empty($this->groups)) {
 			$this->checkGroups($ldap, $event);
@@ -148,14 +159,17 @@ class Ldap
 	 *
 	 * @param             $ldap
 	 * @param Event       $event
+	 *
 	 * @return bool|int|string
 	 */
 	private function getIdentityDn($ldap, Event $event)
 	{
 		$value        = false;
 		$searchResult = ldap_search(
-			$ldap, $this->baseDn, sprintf(
-			"%s=%s", $this->identityField, $event->identity()->identity()));
+			$ldap,
+			$this->baseDn,
+			sprintf("%s=%s", $this->identityField, $event->identity()->identity())
+		);
 		if ($searchResult === false) {
 			// failed to search (unknown reason)
 			$this->setErrorOnEvent($ldap, $event, Sentry::INTERNAL, "Unable to search on $this->server");
@@ -179,13 +193,17 @@ class Ldap
 	 *
 	 * @param       $ldap
 	 * @param Event $event
+	 *
 	 * @return mixed
 	 */
 	private function checkGroups($ldap, Event $event)
 	{
 		$searchResult = ldap_search(
-			$ldap, $this->baseDn, sprintf(
-			"%s=%s", $this->identityField, $event->identity()->identity()), ['memberOf']);
+			$ldap,
+			$this->baseDn,
+			sprintf("%s=%s", $this->identityField, $event->identity()->identity()),
+			['memberOf']
+		);
 		if ($searchResult === false) {
 			// failed to search (unknown reason)
 			$code   = Sentry::INTERNAL;
@@ -220,7 +238,8 @@ class Ldap
 	 * @param Event  $event
 	 * @param int    $code
 	 * @param string $message
-	 * @return int
+	 *
+	 * @return void
 	 */
 	private function setErrorOnEvent($ldap, $event, $code, $message)
 	{

@@ -4,9 +4,8 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
  */
+
 namespace WatchTower\Sentry;
 
 use WatchTower\Event\Event;
@@ -60,6 +59,7 @@ class GenericCallback
 	 * Handles the event
 	 *
 	 * @param Event $event
+	 *
 	 * @return mixed|void
 	 */
 	public function discern(Event $event)

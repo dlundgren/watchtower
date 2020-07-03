@@ -4,9 +4,8 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
  */
+
 namespace WatchTower\Sentry\Authentication;
 
 use WatchTower\Event\Authenticate;
@@ -64,6 +63,7 @@ class WebsiteScrape
 	 * Returns whether or not the given identity/credential are valid
 	 *
 	 * @param Event $event
+	 *
 	 * @return boolean
 	 */
 	public function discern(Event $event)
@@ -81,6 +81,7 @@ class WebsiteScrape
 		$response = @file_get_contents($url);
 		if ($response === false) {
 			$this->setErrorOnEvent($event, Sentry::INTERNAL, "Unable to contact the url: $this->url");
+
 			return;
 		}
 

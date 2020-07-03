@@ -4,9 +4,8 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
  */
+
 namespace WatchTower\Sentry\Identification\Stealth;
 
 use WatchTower\Event\Event;
@@ -61,6 +60,7 @@ class IpBasic
 	 * The ip must be set in order for this to bother test
 	 *
 	 * @param Event $event
+	 *
 	 * @return int
 	 */
 	public function discern(Event $event)

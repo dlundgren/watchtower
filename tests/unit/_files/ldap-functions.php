@@ -4,8 +4,7 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015
+* @copyright 2015
  * @version   0.1
  */
 namespace WatchTower\Sentry\Authentication;

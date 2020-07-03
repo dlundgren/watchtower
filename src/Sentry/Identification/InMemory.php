@@ -4,9 +4,8 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
  */
+
 namespace WatchTower\Sentry\Identification;
 
 use WatchTower\Event\Event;
@@ -45,8 +44,8 @@ class InMemory
 	/**
 	 * Initializes the InMemory settings
 	 *
-	 * @param string $name The name of this sentry
-	 * @param bool   $breakChainOnFailure   If there is a problem should it cause a stop?
+	 * @param string $name                The name of this sentry
+	 * @param bool   $breakChainOnFailure If there is a problem should it cause a stop?
 	 */
 	public function __construct($name, $breakChainOnFailure = false)
 	{
@@ -58,7 +57,7 @@ class InMemory
 	 * Adds an identity/credential pair
 	 *
 	 * @param string $identity
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	public function add($identity, $value)
 	{
@@ -69,6 +68,7 @@ class InMemory
 	 * Attempts to identify the user based on the passed in credentials
 	 *
 	 * @param Event $event
+	 *
 	 * @return bool
 	 */
 	public function discern(Event $event)

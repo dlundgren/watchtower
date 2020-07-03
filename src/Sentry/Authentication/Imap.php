@@ -4,9 +4,8 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
  */
+
 namespace WatchTower\Sentry\Authentication;
 
 use WatchTower\Exception\InvalidArgument;
@@ -80,6 +79,7 @@ class Imap
 	 * Returns whether or not the given identity/credential are valid
 	 *
 	 * @param Event $event
+	 *
 	 * @return mixed|void
 	 */
 	public function discern(Event $event)

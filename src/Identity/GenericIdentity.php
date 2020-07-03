@@ -4,9 +4,8 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
  */
+
 namespace WatchTower\Identity;
 
 use WatchTower\Exception\InvalidArgument;
@@ -198,6 +197,7 @@ class GenericIdentity
 	 * Sets the identity
 	 *
 	 * @param string $identity
+	 *
 	 * @throws \InvalidArgumentException When the identity is not set
 	 */
 	public function setIdentity($identity)
@@ -217,6 +217,7 @@ class GenericIdentity
 	 * Sets the credential
 	 *
 	 * @param string $credential
+	 *
 	 * @throws \InvalidArgumentException When the identity is not set
 	 */
 	public function setCredential($credential = null)

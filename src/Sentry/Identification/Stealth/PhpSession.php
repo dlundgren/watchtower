@@ -4,9 +4,8 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
  */
+
 namespace WatchTower\Sentry\Identification\Stealth;
 
 use WatchTower\Event\Event;
@@ -52,11 +51,15 @@ class PhpSession
 	 * We are authoritative and so we stop event propagation as we have fully identified the user
 	 *
 	 * @param Event $event
+	 *
 	 * @return int
 	 */
 	public function discern(Event $event)
 	{
-		if (session_status() === PHP_SESSION_ACTIVE && $event instanceof Identify && isset($_SESSION[$this->namespace]['identity'])) {
+		if (session_status() === PHP_SESSION_ACTIVE &&
+			$event instanceof Identify &&
+			isset($_SESSION[$this->namespace]['identity'])
+		) {
 			$event->identity()->setIdentified($_SESSION[$this->namespace]['identity']);
 			$event->stopPropagation();
 		}

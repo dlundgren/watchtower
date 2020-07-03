@@ -4,9 +4,9 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
+ * @copyright 2015-2020 David Lundgren
  */
+
 namespace WatchTower\Exception;
 
 /**
@@ -14,5 +14,7 @@ namespace WatchTower\Exception;
  *
  * @package WatchTower\Exception
  */
-class Domain extends \DomainException
-{}
+class Domain
+	extends \DomainException
+{
+}

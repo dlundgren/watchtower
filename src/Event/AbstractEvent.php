@@ -4,9 +4,8 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
  */
+
 namespace WatchTower\Event;
 
 use WatchTower\Identity\Identity;
@@ -73,6 +72,7 @@ abstract class AbstractEvent
 	 *
 	 * @param int    $code One of the \WatchTower\Sentry\Sentry constants
 	 * @param string $message
+	 *
 	 * @return mixed
 	 */
 	public function triggerError($code, $message)

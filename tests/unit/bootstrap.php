@@ -1,6 +1,6 @@
 <?php
 
-$autoload = require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 define('SUPPORT_FILE_PATH', realpath(__DIR__ . '/_files/'));
 

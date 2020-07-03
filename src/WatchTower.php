@@ -4,9 +4,8 @@
  *
  * @license   MIT License
  * @author    David Lundgren
- * @link      http://dlundgren.github.io/watchtower
- * @copyright 2015. David Lundgren
  */
+
 namespace WatchTower;
 
 use WatchTower\Identity\Identity;
@@ -59,6 +58,7 @@ class WatchTower
 	 * Attempts to identify the identity
 	 *
 	 * @param string $identity
+	 *
 	 * @return Identity
 	 */
 	public function identify($identity)
@@ -70,6 +70,7 @@ class WatchTower
 	 * Authenticates using an identity object
 	 *
 	 * @param Identity $identity
+	 *
 	 * @return Identity
 	 */
 	public function authenticateWithIdentity(Identity $identity)
@@ -82,6 +83,7 @@ class WatchTower
 	 *
 	 * @param string $identity
 	 * @param string $credential
+	 *
 	 * @return Identity
 	 */
 	public function authenticate($identity, $credential)
@@ -96,6 +98,7 @@ class WatchTower
 	 * Triggers the event and returns the identity
 	 *
 	 * @param Event $event
+	 *
 	 * @return Identity
 	 */
 	private function triggerAndReturnIdentity(Event $event)
