@@ -9,6 +9,7 @@
  */
 namespace WatchTower\Test\Event;
 
+use PHPUnit\Framework\TestCase;
 use WatchTower\Event\Authenticate;
 use WatchTower\Identity\GenericIdentity;
 
@@ -18,17 +19,19 @@ use WatchTower\Identity\GenericIdentity;
  * @package WatchTower\Test\Event
  */
 class AuthenticateTest
-	extends \PHPUnit_Framework_TestCase
+	extends TestCase
 {
 	public function testConstructorThrowsExceptionWithoutIdentity()
 	{
-		$this->setExpectedException('InvalidArgumentException', 'Incomplete identity, missing identity');
+		$this->expectException('InvalidArgumentException');
+		$this->expectExceptionMessage('Incomplete identity, missing identity');
 		new Authenticate(new GenericIdentity(null));
 	}
 
 	public function testConstructorThrowsExceptionWithoutCredential()
 	{
-		$this->setExpectedException('InvalidArgumentException', 'Incomplete identity, missing credential');
+		$this->expectException('InvalidArgumentException');
+		$this->expectExceptionMessage('Incomplete identity, missing credential');
 		new Authenticate(new GenericIdentity('hi'));
 	}
 }

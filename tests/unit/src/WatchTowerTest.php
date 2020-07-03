@@ -9,6 +9,7 @@
  */
 namespace WatchTower\Test;
 
+use PHPUnit\Framework\TestCase;
 use WatchTower\WatchTower;
 use WatchTower\Sentry;
 use WatchTower\Event\Event;
@@ -19,7 +20,7 @@ use WatchTower\Event\Event;
  * @package WatchTower
  */
 class WatchTowerTest
-	extends \PHPUnit_Framework_TestCase
+	extends TestCase
 {
 	public function testIdentifyWithNoSentriesReturnsInvalid()
 	{

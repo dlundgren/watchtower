@@ -1,4 +1,5 @@
 .idea
+tmp/
 tests/log
 tests/phpunit.xml
 composer.lock

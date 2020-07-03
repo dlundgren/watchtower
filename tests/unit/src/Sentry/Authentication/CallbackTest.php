@@ -9,6 +9,7 @@
  */
 namespace WatchTower\Test\Sentry\Authentication;
 
+use PHPUnit\Framework\TestCase;
 use WatchTower\Event\Identify;
 use WatchTower\Event\Event;
 use WatchTower\Identity\GenericIdentity;
@@ -20,7 +21,7 @@ use WatchTower\Sentry\Authentication\Callback;
  * @package WatchTower\Test\Sentry\Authentication
  */
 class CallbackTest
-	extends \PHPUnit_Framework_TestCase
+	extends TestCase
 {
 	public function testOnlyRunsOnIdentifyEvent()
 	{

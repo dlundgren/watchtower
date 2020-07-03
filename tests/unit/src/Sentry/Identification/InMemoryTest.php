@@ -9,6 +9,8 @@
  */
 namespace WatchTower\Test\Sentry\Identification;
 
+use PHPUnit\Framework\TestCase;
+use WatchTower\Event\AbstractEvent;
 use WatchTower\Event\Identify;
 use WatchTower\Identity\GenericIdentity;
 use WatchTower\Sentry\Identification\InMemory;
@@ -18,7 +20,7 @@ use WatchTower\Sentry\Identification\InMemory;
  *
  */
 class InMemoryTest
-	extends \PHPUnit_Framework_TestCase
+	extends TestCase
 {
 	public function testNameReturns()
 	{
@@ -34,8 +36,8 @@ class InMemoryTest
 	public function testDiscernIgnoresNonIdentifyEvents()
 	{
 		$imap = new InMemory('im-test');
-		$e    = $this->getMock('WatchTower\Event\AbstractEvent', ['discern']);
-		$e->expects($this->never())->method('discern')->willThrowException(new \Exception('Should not call'));
+		$e    = $this->createMock(AbstractEvent::class);
+		$e->expects($this->never())->method('identity')->willThrowException(new \Exception('Should not call'));
 		$imap->discern($e);
 	}
 

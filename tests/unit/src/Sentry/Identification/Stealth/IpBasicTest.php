@@ -9,6 +9,8 @@
  */
 namespace WatchTower\Test\Sentry\Identification;
 
+use PHPUnit\Framework\TestCase;
+use WatchTower\Event\AbstractEvent;
 use WatchTower\Event\Identify;
 use WatchTower\Identity\GenericIdentity;
 use WatchTower\Sentry\Identification\Stealth\IpBasic;
@@ -19,7 +21,7 @@ use WatchTower\Sentry\Identification\Stealth\IpBasic;
  * This tests that each CIDR block is calculated properly, and that the TRANSPARENT_IDENTITY is set on the system
  */
 class IpBasicTest
-	extends \PHPUnit_Framework_TestCase
+	extends TestCase
 {
 	public function provideValidCidrFor1_2_3_4()
 	{
@@ -111,8 +113,8 @@ class IpBasicTest
 	public function testDiscernIgnoresNonIdentifyEvents()
 	{
 		$imap = new IpBasic('ip-test', []);
-		$e    = $this->getMock('WatchTower\Event\AbstractEvent', ['discern']);
-		$e->expects($this->never())->method('discern')->willThrowException(new \Exception('Should not call'));
+		$e    = $this->createMock(AbstractEvent::class);
+		$e->expects($this->never())->method('identity')->willThrowException(new \Exception('Should not call'));
 		$imap->discern($e);
 	}
 

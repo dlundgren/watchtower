@@ -9,6 +9,8 @@
  */
 namespace WatchTower\Test\Sentry\Authentication;
 
+use PHPUnit\Framework\TestCase;
+use WatchTower\Event\AbstractEvent;
 use WatchTower\Identity\GenericIdentity;
 use WatchTower\Event\Authenticate;
 use WatchTower\Sentry\Authentication\Ldap;
@@ -19,11 +21,11 @@ use WatchTower\Sentry\Authentication\Ldap;
  * @package             WatchTower\Authentication\Adapter
  */
 class LdapTest
-	extends \PHPUnit_Framework_TestCase
+	extends TestCase
 {
 	private $mockLdapResource;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		require_once SUPPORT_FILE_PATH . '/ldap-functions.php';
 
@@ -85,15 +87,15 @@ class LdapTest
 	 */
 	public function testConstructorThrowsInvalidArgumentsOnBadDsn($payload)
 	{
-		$this->setExpectedException('InvalidArgumentException');
+		$this->expectException('InvalidArgumentException');
 		new Ldap('ldap-test', $payload, null, null, false);
 	}
 
 	public function testDiscernIgnoresNonAuthenticateEvents()
 	{
 		$l = new Ldap('ldap-test', 'ldap://u:p@s/d=example', 'uid');
-		$e = $this->getMock('WatchTower\Event\AbstractEvent', ['discern']);
-		$e->expects($this->never())->method('discern')->willThrowException(new \Exception('Should not call'));
+		$e = $this->createMock(AbstractEvent::class);
+		$e->expects($this->never())->method('identity')->willThrowException(new \Exception('Should not call'));
 		$l->discern($e);
 	}
 
@@ -112,7 +114,7 @@ class LdapTest
 		$this->mockLdapResource->failConnect = true;
 		$ldap->discern($event);
 		self::assertTrue($event->hasError());
-		self::assertContains("[ldap-test] Unable to connect to ldap://servername", $event->error());
+		self::assertStringContainsString("[ldap-test] Unable to connect to ldap://servername", $event->error());
 	}
 
 	/**
@@ -125,7 +127,7 @@ class LdapTest
 		$event                                  = $this->buildAuthenticateEvent();
 		$ldap->discern($event);
 		self::assertTrue($event->hasError());
-		self::assertContains($credentialError, $event->error());
+		self::assertStringContainsString($credentialError, $event->error());
 	}
 
 	public function testDiscernWithGroupAndFailureOnSearch()
@@ -135,7 +137,7 @@ class LdapTest
 		$event                                   = $this->buildAuthenticateEvent();
 		$ldap->discern($event);
 		self::assertTrue($event->hasError());
-		self::assertContains("[ldap-test] Unable to search for groups on ldap://servername", $event->error());
+		self::assertStringContainsString("[ldap-test] Unable to search for groups on ldap://servername", $event->error());
 	}
 
 	public function testDiscernNotInAllowedGroup()
@@ -147,7 +149,7 @@ class LdapTest
 		$event                                       = $this->buildAuthenticateEvent();
 		$ldap->discern($event);
 		self::assertTrue($event->hasError());
-		self::assertContains("[ldap-test] Not in allowed groups", $event->error());
+		self::assertStringContainsString("[ldap-test] Not in allowed groups", $event->error());
 	}
 
 	public function testDiscernWithGroupSuccess()
@@ -176,6 +178,6 @@ class LdapTest
 		$ldap->discern($event);
 
 		self::assertTrue($event->hasError());
-		self::assertContains("[ldap-test] Identity has no groups assigned", $event->error());
+		self::assertStringContainsString("[ldap-test] Identity has no groups assigned", $event->error());
 	}
 }

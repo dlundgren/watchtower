@@ -7,8 +7,11 @@
  * @link      http://dlundgren.github.io/watchtower
  * @copyright 2015. David Lundgren
  */
+
 namespace WatchTower\Test\Sentry\Identification\Stealth;
 
+use PHPUnit\Framework\TestCase;
+use WatchTower\Event\AbstractEvent;
 use WatchTower\Sentry\Identification\Stealth\PhpSession;
 use WatchTower\Event\Identify;
 use WatchTower\Identity\GenericIdentity;
@@ -19,13 +22,12 @@ use WatchTower\Identity\GenericIdentity;
  * @package WatchTower\Identification\Adapter\Transparent
  */
 class PhpSessionTest
-	extends \PHPUnit_Framework_TestCase
+	extends TestCase
 {
 	private function buildIdentifyEvent()
 	{
 		return new Identify(new GenericIdentity(null));
 	}
-
 
 	public function testNameReturns()
 	{
@@ -36,8 +38,8 @@ class PhpSessionTest
 	public function testDiscernIgnoresNonIdentifyEvents()
 	{
 		$imap = new PhpSession('ip-test', []);
-		$e    = $this->getMock('WatchTower\Event\AbstractEvent', ['discern']);
-		$e->expects($this->never())->method('discern')->willThrowException(new \Exception('Should not call'));
+		$e    = $this->createMock(AbstractEvent::class);
+		$e->expects($this->never())->method('identity')->willThrowException(new \Exception('Should not call'));
 		$imap->discern($e);
 	}
 
@@ -49,14 +51,17 @@ class PhpSessionTest
 		self::assertFalse($e->identity()->isIdentified());
 	}
 
+	/**
+	 * @runInSeparateProcess
+	 */
 	public function testDiscernUsesSession()
 	{
 		if (session_status() === PHP_SESSION_NONE) {
 			@session_start();
 		}
 		$_SESSION['__auth__']['identity'] = 'super';
-		$i = new PhpSession('ps-test', '__auth__');
-		$e = $this->buildIdentifyEvent();
+		$i                                = new PhpSession('ps-test', '__auth__');
+		$e                                = $this->buildIdentifyEvent();
 		$i->discern($e);
 		self::assertTrue($e->identity()->isIdentified());
 		self::assertEquals('super', $e->identity()->identified());

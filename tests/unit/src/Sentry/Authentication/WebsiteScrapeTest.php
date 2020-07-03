@@ -10,6 +10,8 @@
 namespace WatchTower\Test\Sentry\Authentication;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
+use WatchTower\Event\AbstractEvent;
 use WatchTower\Event\Authenticate;
 use WatchTower\Identity\GenericIdentity;
 use WatchTower\Sentry\Authentication\WebsiteScrape;
@@ -20,11 +22,11 @@ use WatchTower\Sentry\Authentication\WebsiteScrape;
  * @package             WatchTower\Authentication\Adapter
  */
 class WebsiteScrapeTest
-	extends \PHPUnit_Framework_TestCase
+	extends TestCase
 {
 	private $vfs;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		// since we use file_get_contents() we can actually use a vfs
 		// to get our responses
@@ -58,8 +60,8 @@ class WebsiteScrapeTest
 	public function testDiscernIgnoresNonAuthenticateEvents()
 	{
 		$ws        = new WebsiteScrape('ws-test', 'http://servername', 'ack');
-		$e = $this->getMock('WatchTower\Event\AbstractEvent', ['discern']);
-		$e->expects($this->never())->method('discern')->willThrowException(new \Exception('Should not call'));
+		$e = $this->createMock(AbstractEvent::class);
+		$e->expects($this->never())->method('identity')->willThrowException(new \Exception('Should not call'));
 		$ws->discern($e);
 	}
 
@@ -79,7 +81,7 @@ class WebsiteScrapeTest
 		$event = $this->buildAuthenticateEvent();
 		$ws->discern($event);
 		self::assertTrue($event->hasError());
-		self::assertContains("[ws-test] Invalid credentials", $event->error());
+		self::assertStringContainsString("[ws-test] Invalid credentials", $event->error());
 	}
 
 	public function testAuthenticateInvalidUrl()
@@ -89,6 +91,6 @@ class WebsiteScrapeTest
 		$event = $this->buildAuthenticateEvent();
 		$ws->discern($event);
 		self::assertTrue($event->hasError());
-		self::assertContains("[ws-test] Unable to contact the url: vfs://auth/ack", $event->error());
+		self::assertStringContainsString("[ws-test] Unable to contact the url: vfs://auth/ack", $event->error());
 	}
 }

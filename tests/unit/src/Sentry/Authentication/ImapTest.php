@@ -9,6 +9,7 @@
  */
 namespace WatchTower\Test\Sentry\Authentication;
 
+use PHPUnit\Framework\TestCase;
 use WatchTower\Sentry\Authentication\Imap;
 use WatchTower\Identity\GenericIdentity;
 use WatchTower\Event\Authenticate;
@@ -19,11 +20,11 @@ use WatchTower\Event\Authenticate;
  * @package             WatchTower\Authentication\Adapter
  */
 class ImapTest
-	extends \PHPUnit_Framework_TestCase
+	extends TestCase
 {
 	private $mockImapResource;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		require_once SUPPORT_FILE_PATH . '/imap-functions.php';
 
@@ -52,15 +53,16 @@ class ImapTest
 
 	public function testConstructorThrowsInvalidArgumentsOnBadDsn()
 	{
-		$this->setExpectedException('InvalidArgumentException', 'DSN is missing the server name');
-		new Imap('imap-test', 'imap://', null, null, false);
+		$this->expectException('InvalidArgumentException');
+		$this->expectExceptionMessage('DSN is missing the server name');
+		new Imap('imap-test', 'imap://', null, false);
 	}
 
 	public function testDiscernIgnoresNonAuthenticateEvents()
 	{
 		$imap = new Imap('imap-test', 'imap://servername');
-		$e    = $this->getMock('WatchTower\Event\AbstractEvent', ['discern']);
-		$e->expects($this->never())->method('discern')->willThrowException(new \Exception('Should not call'));
+		$e    = $this->createMock('WatchTower\Event\AbstractEvent');
+		$e->expects($this->never())->method('identity')->willThrowException(new \Exception('Should not call'));
 		$imap->discern($e);
 	}
 
@@ -80,7 +82,7 @@ class ImapTest
 		$event                                      = $this->buildAuthenticateEvent();
 		$imap->discern($event);
 		self::assertTrue($event->hasError());
-		self::assertContains("[imap-test] Connection timed out", $event->error());
+		self::assertStringContainsString("[imap-test] Connection timed out", $event->error());
 	}
 
 	public function testDiscernFailInvalid()
@@ -90,6 +92,6 @@ class ImapTest
 		$event                            = $this->buildAuthenticateEvent();
 		$imap->discern($event);
 		self::assertTrue($event->hasError());
-		self::assertContains("[imap-test] Invalid Credentials", $event->error());
+		self::assertStringContainsString("[imap-test] Invalid Credentials", $event->error());
 	}
 }
